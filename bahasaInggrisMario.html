@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Bahasa Inggris SMP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: #f3f4f6;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 30px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 30px;
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .question-container {
+            padding: 30px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .question-number {
+            font-size: 0.9em;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-grammar { background: #dbeafe; color: #1e40af; }
+        .badge-vocabulary { background: #dcfce7; color: #166534; }
+        .badge-reading { background: #fed7aa; color: #9a3412; }
+        .badge-tenses { background: #e9d5ff; color: #6b21a8; }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #1f2937;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            font-size: 1em;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e0e7ff;
+        }
+
+        .option.correct {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+
+        .option.wrong {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-check {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-next {
+            background: #10b981;
+            color: white;
+            display: none;
+        }
+
+        .btn-next:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            color: #065f46;
+        }
+
+        .feedback.wrong {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .feedback strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .result-container {
+            text-align: center;
+            padding: 50px 30px;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        .result-emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .result-text {
+            font-size: 1.3em;
+            color: #374151;
+            margin-bottom: 30px;
+        }
+
+        .result-details {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .btn-restart {
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-restart:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .question-text {
+                font-size: 1.1em;
+            }
+
+            .stats {
+                flex-wrap: wrap;
+            }
+
+            .stat {
+                flex: 1 1 50%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 English Practice Quiz</h1>
+            <p>50 Soal Latihan Bahasa Inggris untuk SMP</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">Soal</div>
+                <div class="stat-value"><span id="current-question">1</span>/50</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Benar</div>
+                <div class="stat-value" id="correct-count">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Salah</div>
+                <div class="stat-value" id="wrong-count">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Skor</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="quiz-container">
+            <div class="question-header">
+                <span class="question-number" id="question-num">Question 1 of 50</span>
+                <span class="category-badge" id="category-badge">Grammar</span>
+            </div>
+
+            <div class="question-text" id="question-text"></div>
+
+            <div class="options" id="options"></div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="button-container">
+                <button class="btn btn-check" id="check-btn" onclick="checkAnswer()">Check Answer</button>
+                <button class="btn btn-next" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <div class="result-emoji" id="result-emoji">🎉</div>
+            <div class="result-score" id="final-score">0</div>
+            <div class="result-text" id="result-text">Great Job!</div>
+            
+            <div class="result-details">
+                <div class="result-row">
+                    <span>Total Soal:</span>
+                    <strong>50</strong>
+                </div>
+                <div class="result-row">
+                    <span>Jawaban Benar:</span>
+                    <strong id="final-correct">0</strong>
+                </div>
+                <div class="result-row">
+                    <span>Jawaban Salah:</span>
+                    <strong id="final-wrong">0</strong>
+                </div>
+                <div class="result-row">
+                    <span>Persentase:</span>
+                    <strong id="final-percentage">0%</strong>
+                </div>
+            </div>
+
+            <button class="btn-restart" onclick="restartQuiz()">🔄 Mulai Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Grammar - Present Tense
+            { category: "grammar", question: "She ___ to school every day.", options: ["go", "goes", "going", "gone"], answer: 1 },
+            { category: "grammar", question: "They ___ playing football now.", options: ["is", "am", "are", "be"], answer: 2 },
+            { category: "grammar", question: "I ___ breakfast at 7 o'clock every morning.", options: ["eat", "eats", "eating", "ate"], answer: 0 },
+            { category: "grammar", question: "He ___ his homework right now.", options: ["do", "does", "is doing", "doing"], answer: 2 },
+            { category: "grammar", question: "My father ___ to work by car.", options: ["go", "goes", "going", "gone"], answer: 1 },
+            
+            // Grammar - Past Tense
+            { category: "tenses", question: "I ___ to Bali last year.", options: ["go", "goes", "went", "gone"], answer: 2 },
+            { category: "tenses", question: "She ___ a letter yesterday.", options: ["write", "writes", "wrote", "written"], answer: 2 },
+            { category: "tenses", question: "They ___ football last Sunday.", options: ["play", "plays", "played", "playing"], answer: 2 },
+            { category: "tenses", question: "We ___ our grandparents last weekend.", options: ["visit", "visits", "visited", "visiting"], answer: 2 },
+            { category: "tenses", question: "He ___ his bike to school yesterday.", options: ["ride", "rides", "rode", "riding"], answer: 2 },
+            
+            // Vocabulary - Animals
+            { category: "vocabulary", question: "A ___ is the king of the jungle.", options: ["tiger", "lion", "elephant", "giraffe"], answer: 1 },
+            { category: "vocabulary", question: "A ___ can fly and has colorful feathers.", options: ["fish", "bird", "snake", "frog"], answer: 1 },
+            { category: "vocabulary", question: "An ___ has a very long trunk.", options: ["elephant", "horse", "cow", "sheep"], answer: 0 },
+            { category: "vocabulary", question: "A ___ lives in water and has fins.", options: ["bird", "cat", "fish", "dog"], answer: 2 },
+            { category: "vocabulary", question: "A ___ is a domestic animal that says 'meow'.", options: ["dog", "cat", "rabbit", "hamster"], answer: 1 },
+            
+            // Vocabulary - Food
+            { category: "vocabulary", question: "We drink ___ every morning.", options: ["rice", "bread", "milk", "meat"], answer: 2 },
+            { category: "vocabulary", question: "An ___ is a red or green fruit.", options: ["orange", "apple", "banana", "grape"], answer: 1 },
+            { category: "vocabulary", question: "___ is a yellow fruit that monkeys love.", options: ["Apple", "Banana", "Orange", "Mango"], answer: 1 },
+            { category: "vocabulary", question: "We eat ___ with fork and spoon.", options: ["drink", "water", "food", "juice"], answer: 2 },
+            { category: "vocabulary", question: "___ is white and we eat it every day in Indonesia.", options: ["Bread", "Rice", "Noodle", "Potato"], answer: 1 },
+            
+            // Grammar - Modal Verbs
+            { category: "grammar", question: "You ___ wear a helmet when riding a motorcycle.", options: ["can", "must", "may", "might"], answer: 1 },
+            { category: "grammar", question: "She ___ speak three languages.", options: ["can", "must", "should", "would"], answer: 0 },
+            { category: "grammar", question: "___ I borrow your pen?", options: ["Must", "Should", "Can", "Would"], answer: 2 },
+            { category: "grammar", question: "Students ___ be quiet in the library.", options: ["can", "may", "must", "might"], answer: 2 },
+            { category: "grammar", question: "It ___ rain tomorrow.", options: ["must", "should", "might", "can"], answer: 2 },
+            
+            // Reading Comprehension
+            { category: "reading", question: "What is the opposite of 'hot'?", options: ["warm", "cold", "cool", "heat"], answer: 1 },
+            { category: "reading", question: "What is the opposite of 'big'?", options: ["large", "huge", "small", "wide"], answer: 2 },
+            { category: "reading", question: "What is the opposite of 'happy'?", options: ["glad", "sad", "joy", "laugh"], answer: 1 },
+            { category: "reading", question: "What is the opposite of 'old'?", options: ["young", "new", "fresh", "ancient"], answer: 0 },
+            { category: "reading", question: "What is the opposite of 'clean'?", options: ["tidy", "neat", "dirty", "pure"], answer: 2 },
+            
+            // Grammar - Pronouns
+            { category: "grammar", question: "___ am a student.", options: ["I", "You", "He", "She"], answer: 0 },
+            { category: "grammar", question: "___ is my best friend.", options: ["I", "You", "He", "They"], answer: 2 },
+            { category: "grammar", question: "___ are going to the park.", options: ["I", "He", "She", "We"], answer: 3 },
+            { category: "grammar", question: "This book is ___.", options: ["my", "mine", "I", "me"], answer: 1 },
+            { category: "grammar", question: "That is ___ house.", options: ["they", "them", "their", "theirs"], answer: 2 },
+            
+            // Vocabulary - Colors & Numbers
+            { category: "vocabulary", question: "The color of the sky is ___.", options: ["red", "blue", "green", "yellow"], answer: 1 },
+            { category: "vocabulary", question: "A banana is ___.", options: ["red", "blue", "yellow", "purple"], answer: 2 },
+            { category: "vocabulary", question: "Ten plus five equals ___.", options: ["thirteen", "fourteen", "fifteen", "sixteen"], answer: 2 },
+            { category: "vocabulary", question: "Twenty minus eight equals ___.", options: ["eleven", "twelve", "thirteen", "fourteen"], answer: 1 },
+            { category: "vocabulary", question: "The color of grass is ___.", options: ["red", "green", "blue", "yellow"], answer: 1 },
+            
+            // Grammar - Prepositions
+            { category: "grammar", question: "The cat is ___ the table.", options: ["in", "on", "at", "to"], answer: 1 },
+            { category: "grammar", question: "I live ___ Jakarta.", options: ["in", "on", "at", "to"], answer: 0 },
+            { category: "grammar", question: "The meeting is ___ 3 o'clock.", options: ["in", "on", "at", "to"], answer: 2 },
+            { category: "grammar", question: "She is standing ___ the door.", options: ["in front of", "between", "among", "inside"], answer: 0 },
+            { category: "grammar", question: "The book is ___ the bag.", options: ["on", "in", "at", "to"], answer: 1 },
+            
+            // Vocabulary - Body Parts
+            { category: "vocabulary", question: "We see with our ___.", options: ["ears", "eyes", "nose", "mouth"], answer: 1 },
+            { category: "vocabulary", question: "We hear with our ___.", options: ["eyes", "nose", "ears", "mouth"], answer: 2 },
+            { category: "vocabulary", question: "We smell with our ___.", options: ["eyes", "nose", "ears", "mouth"], answer: 1 },
+            { category: "vocabulary", question: "We walk with our ___.", options: ["hands", "legs", "arms", "head"], answer: 1 },
+            { category: "vocabulary", question: "We write with our ___.", options: ["feet", "legs", "hands", "head"], answer: 2 }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let selectedOption = null;
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            
+            document.getElementById('question-num').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('question-text').textContent = q.question;
+            
+            const badge = document.getElementById('category-badge');
+            badge.textContent = q.category.charAt(0).toUpperCase() + q.category.slice(1);
+            badge.className = 'category-badge badge-' + q.category;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('check-btn').style.display = 'block';
+            document.getElementById('check-btn').disabled = true;
+            document.getElementById('next-btn').style.display = 'none';
+            selectedOption = null;
+            
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (document.getElementById('check-btn').style.display === 'none') return;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            selectedOption = index;
+            document.getElementById('check-btn').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (selectedOption === null) return;
+            
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            if (selectedOption === q.answer) {
+                options[selectedOption].classList.add('correct');
+                correctAnswers++;
+                document.getElementById('correct-count').textContent = correctAnswers;
+                
+                feedback.className = 'feedback correct show';
+                feedback.innerHTML = '<strong>✅ Correct!</strong>Well done! Your answer is right.';
+            } else {
+                options[selectedOption].classList.add('wrong');
+                options[q.answer].classList.add('correct');
+                wrongAnswers++;
+                document.getElementById('wrong-count').textContent = wrongAnswers;
+                
+                feedback.className = 'feedback wrong show';
+                feedback.innerHTML = `<strong>❌ Incorrect!</strong>The correct answer is: ${q.options[q.answer]}`;
+            }
+            
+            const score = Math.round((correctAnswers / questions.length) * 100);
+            document.getElementById('score').textContent = score;
+            
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('result-container').classList.add('show');
+            
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            document.getElementById('final-score').textContent = percentage;
+            document.getElementById('final-correct').textContent = correctAnswers;
+            document.getElementById('final-wrong').textContent = wrongAnswers;
+            document.getElementById('final-percentage').textContent = percentage + '%';
+            
+            let emoji = '🎉';
+            let text = 'Excellent!';
+            
+            if (percentage >= 90) {
+                emoji = '🏆';
+                text = 'Outstanding! You\'re a star!';
+            } else if (percentage >= 80) {
+                emoji = '🎉';
+                text = 'Excellent Work!';
+            } else if (percentage >= 70) {
+                emoji = '😊';
+                text = 'Good Job!';
+            } else if (percentage >= 60) {
+                emoji = '👍';
+                text = 'Not Bad! Keep Practicing!';
+            } else {
+                emoji = '💪';
+                text = 'Keep Trying! You Can Do Better!';
+            }
+            
+            document.getElementById('result-emoji').textContent = emoji;
+            document.getElementById('result-text').textContent = text;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            selectedOption = null;
+            
+            document.getElementById('correct-count').textContent = '0';
+            document.getElementById('wrong-count').textContent = '0';
+            document.getElementById('score').textContent = '0';
+            
+            document.getElementById('result-container').classList.remove('show');
+            document.getElementById('quiz-container').style.display = 'block';
+            
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
